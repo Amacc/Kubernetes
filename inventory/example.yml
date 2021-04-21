@@ -1,0 +1,22 @@
+all:
+  children:
+    master:
+      hosts:
+        rpi-master.local:
+          ansible_host: 192.168.0.11
+
+    workers:
+      hosts:
+        worker-01.local:
+          ansible_host: 192.168.0.21
+        worker-02.local:
+          ansible_host: 192.168.0.22
+        worker-03.local:
+          ansible_host: 192.168.0.23
+        worker-04.local:
+          ansible_host: 192.168.0.24
+        worker-05.local:
+          ansible_host: 192.168.0.25
+
+  vars:
+    ansible_user: pi

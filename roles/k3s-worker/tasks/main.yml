@@ -1,0 +1,14 @@
+- block:
+  - name: Checking K3s Status
+    service:
+      name: k3s-agent
+      state: started
+  rescue:
+    - name: Install K3s Worker
+      local_action:
+        module: shell
+        _raw_params: >-
+          k3sup join
+          --ip {{ ansible_host }}
+          --server-ip {{ hostvars[groups.master[0]].ansible_host }}
+          --user {{ ansible_user }}

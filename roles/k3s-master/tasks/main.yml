@@ -1,0 +1,12 @@
+- name: K3s Master Service
+  block:
+  - service:
+      name: k3s
+      state: started
+  rescue:
+    - name: Install K3s Master
+      local_action:
+        module: shell
+        _raw_params: >
+          k3sup install --ip {{ ansible_host }}
+          --user {{ ansible_user }} --no-extras
