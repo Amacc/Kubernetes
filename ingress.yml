@@ -1,0 +1,15 @@
+
+- name: Helm setup on all helm servers
+  hosts: localhost
+  tasks:
+  - name: Helm
+    include_role:
+      name: common
+      tasks_from: helm
+
+- name: Setup Ingress
+  hosts: localhost
+  roles:
+    - ingress
+  collections:
+    - kubernetes.core

@@ -1,0 +1,19 @@
+
+- name: Helm
+  block:
+    - name: helm version
+      shell: helm version
+  rescue:
+    - name: Download zsh installer
+      get_url:
+        url: https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+        dest: /tmp/get_helm.sh
+        mode: 700
+
+    - name: Execute the zsh-installer.sh
+      shell: /tmp/get_helm.sh
+
+    - name: Remove the zsh-installer.sh
+      file:
+        path: /tmp/get_helm.sh
+        state: absent
