@@ -3,6 +3,8 @@
   block:
     - name: helm version
       shell: helm version
+      changed_when: helm_version.rc != 0
+      register: helm_version
   rescue:
     - name: Download zsh installer
       get_url:
