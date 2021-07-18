@@ -1,14 +1,23 @@
-- block:
-  - name: Checking K3s Status
-    service:
-      name: k3s-agent
-      state: started
-  rescue:
-    - name: Install K3s Worker
-      local_action:
-        module: shell
-        _raw_params: >-
-          k3sup join
-          --ip {{ ansible_host }}
-          --server-ip {{ hostvars[groups.master[0]].ansible_host }}
-          --user {{ ansible_user }}
+- name: Get Service Facts
+  service_facts:
+  tags: always
+
+- debug:
+    var: "'k3s-agent.service' in ansible_facts.services"
+  tags: always
+
+- name: Install K3s Worker
+  local_action:
+    module: shell
+    _raw_params: >-
+      k3sup join
+      --ip {{ ansible_host }}
+      --server-ip {{ hostvars[groups.master[0]].ansible_host }}
+      --user {{ ansible_user }}
+  when: "'k3s-agent.service' not in ansible_facts.services"
+  tags: install
+
+- name: Teardown K3s Service
+  ansible.builtin.shell: /usr/local/bin/k3s-agent-uninstall.sh
+  when: "'k3s-agent.service' in ansible_facts.services"
+  tags: teardown
