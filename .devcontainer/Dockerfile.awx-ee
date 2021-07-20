@@ -1,0 +1,3 @@
+# docker pull quay.io/ansible/awx-ee:devel
+FROM quay.io/ansible/awx-ee:devel
+
