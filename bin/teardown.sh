@@ -1,1 +1,1 @@
-ansible-playbook -t teardown site.yml -i inventory/raspberries.yml
+ansible-playbook -t teardown k3s-cluster.yml -i inventory/raspberries.yml

@@ -20,4 +20,6 @@
 - name: Teardown K3s Service
   ansible.builtin.shell: /usr/local/bin/k3s-agent-uninstall.sh
   when: "'k3s-agent.service' in ansible_facts.services"
-  tags: teardown
+  tags:
+  - teardown
+  - never

@@ -1,5 +1,5 @@
 
-- name: K3sUp locally
+- name: K3sUp
   hosts: localhost
   tasks:
     - name: Get K3sUp Version

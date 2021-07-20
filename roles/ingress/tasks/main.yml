@@ -22,8 +22,10 @@
 
     - name: MetalB Core System
       community.kubernetes.k8s:
-        src: ~/metalb/core.yml 
+        src: ~/metalb/core.yml
         # definition: "{{ lookup('file', 'files/metalb-core.yml') | from_yaml }}"
+  tags: install
+
 
 - name: Ingress
   block:
@@ -43,6 +45,7 @@
 
     - name: Deploy latest version of nginx ingress
       community.kubernetes.helm:
-        name: {{ ingress_name }}
+        name: "{{ ingress_name }}"
         chart_ref: ingress-nginx/ingress-nginx
         release_namespace: ingress
+  tags: install

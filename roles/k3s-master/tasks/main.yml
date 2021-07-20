@@ -2,19 +2,19 @@
   service_facts:
   tags: always
 
-
 - name: Install K3s Master
   local_action:
     module: shell
     _raw_params: >
       k3sup install --ip {{ ansible_host }}
       --user {{ ansible_user }} --no-extras
-  when: "'k3s' not in ansible_facts.services"
+  when: "'k3s.service' not in ansible_facts.services"
   tags: install
 
 
 - name: Teardown K3s Master Service
   ansible.builtin.shell: /usr/local/bin/k3s-uninstall.sh
-  when: "'k3s' in ansible_facts.services"
+  when: "'k3s.service' in ansible_facts.services"
   tags:
     - teardown
+    - never
