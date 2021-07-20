@@ -17,3 +17,14 @@
 Kubernetes on Raspberry PI
 ==========================
 
+For running this project the following variables need to be
+defined. Included on the example.yml inventory.
+
+    base_dns: contoso.local
+    dns_resource_name: internal-dns
+    dns_namespace: coredns
+
+    ingress_name: contoso-ingress
+    ingress_namespace: ingress
+
+    pihole_host: pihole.contoso.local
