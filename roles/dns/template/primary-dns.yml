@@ -1,0 +1,50 @@
+serviceType: LoadBalancer
+service:
+  name: "{{ dns_resource_name }}"
+
+servers:
+- zones:
+  - zone: .
+    scheme: dns://
+    use_tcp: false
+  port: 53
+  plugins:
+  - name: errors
+  # Serves a /health endpoint on :8080, required for livenessProbe
+  - name: health
+    configBlock: |-
+      lameduck 5s
+  # Serves a /ready endpoint on :8181, required for readinessProbe
+  - name: ready
+  # Required to query kubernetes API for data
+  - name: kubernetes
+    parameters: cluster.local in-addr.arpa ip6.arpa
+    configBlock: |-
+      pods insecure
+      fallthrough in-addr.arpa ip6.arpa
+      ttl 30
+  # Serves a /metrics endpoint on :9153, required for serviceMonitor
+  - name: prometheus
+    parameters: 0.0.0.0:9153
+  - name: file
+    parameters: /etc/coredns/{{ base_dns }}.db {{ base_dns }}
+  - name: forward
+    parameters: . /etc/resolv.conf
+  - name: cache
+    parameters: 30
+  - name: loop
+  - name: reload
+  - name: loadbalance
+
+zoneFiles:
+  - filename: "{{ base_dns }}.db"
+    contents: |
+      ; {{base_dns }}. dns file
+      {{ base_dns }}.  IN      SOA     sns.dns.icann.org. noc.dns.icann.org. 2015082541 7200 3600 1209600 3600
+      {{ base_dns }}.  IN      NS      b.iana-servers.net.
+      {{ base_dns }}.  IN      NS      a.iana-servers.net.
+      {{ base_dns }}.  IN      A       127.0.0.1
+
+      ; wildcards for directing traffic at ingress
+      *.{{ base_dns }}.     IN      A   {{ ingress_ip }}
+      *.*.{{ base_dns }}.   IN      A   {{ ingress_ip }}

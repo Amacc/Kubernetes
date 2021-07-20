@@ -1,0 +1,31 @@
+- name: PiHole
+  block:
+    - name: Get an existing Service object
+      community.kubernetes.k8s_info:
+        api_version: v1
+        kind: Service
+        name: "{{ dns_resource_name }}"
+        namespace: "{{ dns_namespace }}"
+      register: k8sdns
+
+    - name: Ingress LoadBalancer
+      debug:
+        var: k8sdns.resources[0].status.loadBalancer
+      tags: always
+
+    - name: PiHole Helm Repo
+      community.kubernetes.helm_repository:
+        name: mojo2600
+        repo_url: https://mojo2600.github.io/pihole-kubernetes/
+
+    - name: Deploy PiHole
+      community.kubernetes.helm:
+        name: pihole
+        chart_ref: mojo2600/pihole
+        release_namespace: pihole
+        create_namespace: true
+        values: "{{ lookup('template', 'template/values.yml') | from_yaml }}"
+      vars:
+        primary_dns: "{{ k8sdns.resources[0].status.loadBalancer.ingress[0].ip }}"
+
+    # tags: always

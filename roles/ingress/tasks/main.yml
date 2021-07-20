@@ -3,6 +3,28 @@
 # helm repo update
 # helm install ingress-nginx ingress-nginx/ingress-nginx
 # From repository
+
+- name: LoadBalancer
+  block:
+    - name: MetalB Namespace
+      community.kubernetes.k8s:
+        definition: "{{ lookup('file', 'files/metalb-namespace.yml') | from_yaml }}"
+
+    - name: MetalB Config
+      community.kubernetes.k8s:
+        definition: "{{ lookup('file', 'files/metalb-config.yml') | from_yaml }}"
+
+    - name: Get Newest Metalb Manifest
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
+        dest: ~/metalb/core.yml
+        mode: '0664'
+
+    - name: MetalB Core System
+      community.kubernetes.k8s:
+        src: ~/metalb/core.yml 
+        # definition: "{{ lookup('file', 'files/metalb-core.yml') | from_yaml }}"
+
 - name: Ingress
   block:
     - name: ingress namespace
@@ -21,6 +43,6 @@
 
     - name: Deploy latest version of nginx ingress
       community.kubernetes.helm:
-        name: default
+        name: {{ ingress_name }}
         chart_ref: ingress-nginx/ingress-nginx
         release_namespace: ingress

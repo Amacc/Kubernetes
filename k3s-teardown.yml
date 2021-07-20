@@ -10,7 +10,6 @@
           local_action:
             module: shell
             _raw_params: curl -sLS https://get.k3sup.dev | sh
-  tags: install
 
 - name: Setup K3s Master
   hosts: master

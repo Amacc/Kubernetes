@@ -1,0 +1,31 @@
+- name: DNS
+  block:
+    - name: Get an existing Service object
+      community.kubernetes.k8s_info:
+        api_version: v1
+        kind: Service
+        name: "{{ ingress_name }}-{{ ingress_namespace }}-nginx-controller"
+        namespace: "{{ ingress_namespace }}"
+      register: k8singress
+
+    - name: Ingress LoadBalancer
+      debug:
+        var: k8singress.resources[0].status.loadBalancer
+      tags: always
+
+    - name: CoreDNS Helm Repo
+      community.kubernetes.helm_repository:
+        name: coredns
+        repo_url: https://coredns.github.io/helm
+
+    - name: Deploy CoreDNS
+      community.kubernetes.helm:
+        name: "{{ dns_resource_name }}"
+        chart_ref: coredns/coredns
+        release_namespace: "{{ dns_namespace }}"
+        create_namespace: true
+        values: "{{ lookup('template', 'template/primary-dns.yml') | from_yaml }}"
+      vars:
+        ingress_ip: "{{ k8singress.resources[0].status.loadBalancer.ingress[0].ip }}"
+
+    # tags: always

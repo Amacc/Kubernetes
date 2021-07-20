@@ -7,7 +7,7 @@
       name: common
       tasks_from: helm
 
-- name: Setup Ingress
+- name: Setup DNS
   hosts: localhost
   roles:
-    - ingress
+    - dns
