@@ -1,0 +1,1 @@
+ansible-playbook -t install site.yml -i inventory/raspberries.yml
