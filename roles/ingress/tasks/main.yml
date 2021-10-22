@@ -17,12 +17,13 @@
     - name: Get Newest Metalb Manifest
       ansible.builtin.get_url:
         url: https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
-        dest: ~/metalb/core.yml
+        dest: /tmp/metalb-core.yml
         mode: '0664'
+      register: manifest
 
     - name: MetalB Core System
       community.kubernetes.k8s:
-        src: ~/metalb/core.yml
+        src: "{{ manifest.dest }}"
         # definition: "{{ lookup('file', 'files/metalb-core.yml') | from_yaml }}"
   tags: install
 
