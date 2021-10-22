@@ -11,6 +11,7 @@
     - name: Setup openssl for ssh
       ansible.builtin.package:
         name: openssl
+      become: yes
 
     - name: Download zsh installer
       get_url:
