@@ -1,0 +1,12 @@
+
+- name: Creates directory
+  file:
+    path: /etc/rancher/k3s
+    recurse: true
+  become: true
+
+- name: set registries.yml
+  ansible.builtin.template:
+    src: registries.yml
+    dest: /etc/rancher/k3s/registies.yml
+  become: true
