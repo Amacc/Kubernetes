@@ -1,0 +1,8 @@
+
+- name: Install Python packages
+  ansible.builtin.pip:
+    name: "{{ package }}"
+    virtualenv: "{{ venv_path | default(omit) }}"
+  with_items: "{{ packages | default([]) }}"
+  loop_control:
+    loop_var: package
