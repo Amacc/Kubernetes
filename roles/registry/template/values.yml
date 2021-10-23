@@ -1,0 +1,6 @@
+ingress:
+  enabled: true
+  hosts:
+  - "{{ registry_host }}"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"

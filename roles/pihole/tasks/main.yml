@@ -1,6 +1,6 @@
 - name: PiHole
   block:
-    - name: Get an existing Service object
+    - name: Get DNS Service
       community.kubernetes.k8s_info:
         api_version: v1
         kind: Service
@@ -8,9 +8,13 @@
         namespace: "{{ dns_namespace }}"
       register: k8sdns
 
+    - name: Manor DNS Server
+      ansible.builtin.set_fact:
+        hosted_dns: "{{ k8sdns.resources[0].status.loadBalancer }}"
+
     - name: Ingress LoadBalancer
       debug:
-        var: k8sdns.resources[0].status.loadBalancer
+        var: hosted_dns
       tags: always
 
     - name: PiHole Helm Repo

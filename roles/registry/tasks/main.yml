@@ -1,0 +1,15 @@
+- name: Registry
+  tags: install
+  block:
+    - name: Registry Helm Repo
+      community.kubernetes.helm_repository:
+        name: twuni
+        repo_url: https://helm.twun.io
+
+    - name: Deploy Docker Registry
+      community.kubernetes.helm:
+        name: registry
+        chart_ref: twuni/docker-registry
+        release_namespace: registry
+        create_namespace: true
+        values: "{{ lookup('template', 'template/values.yml') | from_yaml }}"
