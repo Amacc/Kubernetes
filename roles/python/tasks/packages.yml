@@ -1,6 +1,7 @@
 - name: Python SetupTools
   ansible.builtin.package: 
     name: python-setuptools
+  become: "{{ not no_become and ansible_user != 'root' }}"
 
 - name: Install Python packages
   ansible.builtin.pip:
