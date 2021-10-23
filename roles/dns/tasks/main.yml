@@ -9,6 +9,11 @@
       register: k8singress
 
     - name: Ingress LoadBalancer
+      ansible.builtin.set_fact:
+        hosted_ingress: k8singress.resources[0].status.loadBalancer
+      tags: always
+
+    - name: Ingress LoadBalancer
       debug:
         var: k8singress.resources[0].status.loadBalancer
       tags: always
@@ -27,5 +32,3 @@
         values: "{{ lookup('template', 'template/primary-dns.yml') | from_yaml }}"
       vars:
         ingress_ip: "{{ k8singress.resources[0].status.loadBalancer.ingress[0].ip }}"
-
-    # tags: always
