@@ -1,18 +1,10 @@
 
-- name: Helm setup on all helm servers
-  hosts: helm
-  tasks:
-  - name: Helm
-    include_role:
-      name: common
-      tasks_from: helm
-
-- name: Setup DNS Servers
+- name: Deploy DNS
   hosts: helm
   roles:
     - dns
 
-- name: Setup DNS
+- name: Setup Workers to use new DNS
   hosts: workers
   tasks:
     - include_role:
