@@ -1,5 +1,5 @@
 - name: Python SetupTools
-  ansible.builtin.packages: 
+  ansible.builtin.package: 
     name: python-setuptools
 
 - name: Install Python packages
