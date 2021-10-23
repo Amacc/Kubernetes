@@ -1,0 +1,23 @@
+
+- name: Install Helm Chart
+  block:
+    - name: "{{ chart_namespace }} namespace"
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: "{{ chart_namespace }}"
+
+    - name: "{{ chart_name }} chart repo"
+      community.kubernetes.helm_repository:
+        name: "{{ chart_name }}"
+        repo_url: "{{ chart_url }}"
+
+    - name: "Deploy latest version of {{ chart_name }}"
+      community.kubernetes.helm:
+        name: "{{ ingress_name }}"
+        chart_ref: "ingress-nginx/ingress-nginx"
+        release_namespace: "{{ chart_namespace  }}"
+  tags: install
