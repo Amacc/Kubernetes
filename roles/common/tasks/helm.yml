@@ -7,6 +7,9 @@
 
 - name: Install Helm
   when: helm_version_command.failed
+  # When running in a pod running as root user internally
+  # Alternatively when running on pi this should call the sudo command
+  become: "{{ not no_become and ansible_user != 'root' }}"
   block:
     - name: Setup openssl for ssh
       ansible.builtin.package:
