@@ -2,7 +2,7 @@ dependencies:
   - role: linux
     vars:
       user: "{{ ansible_user }}"
-      group: "{{ docker_group }}"
+      group: "docker"
   - role: python
     vars:
       packages:
