@@ -27,7 +27,7 @@
         build_path: "{{ dockerfile.dest | dirname }}"
         build_containerfile: "{{ dockerfile.dest }}"
 
-- name: Build Docker Job Image
+- name: Build Image {{ container_name }}
   # become: "{{ docker_become | default(true) }}"
   community.docker.docker_image:
     name: "{{ registry_host }}/{{ container_name }}"
@@ -41,3 +41,14 @@
     force_source: yes
     push: true
     args: "{{ build_args | default(omit) }}"
+  register: build_image
+  async: 3600
+  poll: 15
+
+- name: Check if build is complete
+  ansible.builtin.async_status:
+    jid: "{{ build_image.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 10
+  retries: 300
