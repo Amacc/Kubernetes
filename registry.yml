@@ -1,6 +1,6 @@
 
 - name: Setup Registry
-  hosts: localhost
+  hosts: helm
   roles:
     - registry
 
