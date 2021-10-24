@@ -1,12 +1,4 @@
 
-- name: Helm setup on helm server
-  hosts: localhost
-  tasks:
-  - name: Helm
-    include_role:
-      name: common
-      tasks_from: helm
-
 - name: Setup Registry
   hosts: localhost
   roles:
