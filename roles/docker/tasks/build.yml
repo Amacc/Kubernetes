@@ -44,11 +44,3 @@
   register: build_image
   async: 3600
   poll: 15
-
-- name: Check if build is complete
-  ansible.builtin.async_status:
-    jid: "{{ build_image.ansible_job_id }}"
-  register: job_result
-  until: job_result.finished
-  delay: 10
-  retries: 300
