@@ -1,12 +1,4 @@
 
-- name: Helm setup on all helm servers
-  hosts: localhost
-  tasks:
-  - name: Helm
-    include_role:
-      name: common
-      tasks_from: helm
-
 - name: Setup PiHole
   hosts: localhost
   roles:

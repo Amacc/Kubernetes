@@ -1,7 +1,13 @@
 # Variables
 - name: Set resolv.conf
-  blockinfile:
+  ansible.builtin.lineinfile:
     path: /etc/resolv.conf
-    marker: "# ANSIBLE MANAGED BLOCK {mark}"
-    block: "nameserver {{ dns_ip }}"
+    search_string: "domain"
+    line: "domain {{ base_dns }}"
+  become: yes
+
+- name: Set resolv.conf
+  ansible.builtin.lineinfile:
+    path: /etc/resolv.conf
+    line: "nameserver {{ dns_ip }}"
   become: yes
