@@ -4,3 +4,4 @@
     path: /etc/resolv.conf
     marker: "# ANSIBLE MANAGED BLOCK {mark}"
     block: "nameserver {{ dns_ip }}"
+  become: yes
