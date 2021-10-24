@@ -11,12 +11,12 @@
 
     - name: Ingress LoadBalancer
       ansible.builtin.set_fact:
-        hosted_ingress: k8singress.resources[0].status.loadBalancer
+        hosted_ingress: "{{ k8singress.resources[0].status.loadBalancer }}"
       tags: always
 
     - name: Ingress LoadBalancer
       debug:
-        var: k8singress.resources[0].status.loadBalancer
+        var: hosted_ingress
       tags: always
 
     - name: CoreDNS Helm Repo
@@ -32,4 +32,17 @@
         create_namespace: true
         values: "{{ lookup('template', 'template/primary-dns.yml') | from_yaml }}"
       vars:
-        ingress_ip: "{{ k8singress.resources[0].status.loadBalancer.ingress[0].ip }}"
+        ingress_ip: "{{ hosted_ingress.ingress[0].ip }}"
+
+    - name: Get created DNS Service
+      community.kubernetes.k8s_info:
+        api_version: v1
+        kind: Service
+        name: "{{ dns_resource_name }}"
+        namespace: "{{ dns_namespace }}"
+      register: k8sdns
+
+    - name: Set DNS Fact
+      ansible.builtin.set_fact:
+        hosted_dns_ip: "{{ k8sdns.resources[0].status.loadBalancer.ingress[0].ip }}"
+      tags: always

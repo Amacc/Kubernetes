@@ -11,4 +11,4 @@
         name: k3s-worker
         tasks_from: resolve
   vars:
-    dns_ip: "{{ hostvars[groups['helm'][0]]['hosted_dns'] }}"
+    dns_ip: "{{ hostvars[groups['helm'][0]]['hosted_dns_ip'] }}"
