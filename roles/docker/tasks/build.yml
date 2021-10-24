@@ -34,13 +34,13 @@
     build:
       path: "{{ build_path }}"
       dockerfile: "{{ build_containerfile }}"
+      args: "{{ build_args | default(omit) }}"
     repository: "{{ registry_host }}/{{ container_name }}:{{ container_tag }}"
     tag: "{{ container_tag }}"
     source: build
     force_tag: yes
     force_source: yes
     push: true
-    args: "{{ build_args | default(omit) }}"
   register: build_image
   async: 3600
   poll: 15
