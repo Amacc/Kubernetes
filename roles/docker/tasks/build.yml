@@ -12,7 +12,7 @@
   community.docker.docker_image:
     name: "{{ registry_host }}/{{ container_name }}"
     build:
-      path: "{{ dockerfile.dest | directory }}"
+      path: "{{ dockerfile.dest | dirname }}"
     repository: "{{ registry_host }}/{{ container_name }}:{{ container_tag }}"
     tag: "{{ container_tag }}"
     source: build
