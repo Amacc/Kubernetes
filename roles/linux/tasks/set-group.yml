@@ -1,0 +1,12 @@
+# sudo groupadd docker
+- name: Group {{ group }} Exists
+  ansible.builtin.group:
+    name: "{{ group }}"
+    state: present
+
+# sudo usermod -aG docker root
+- name: User {{ user }} is added to {{ group }}
+  ansible.builtin.user:
+    name: "{{ user }}"
+    group: "{{ group }}"
+    append: yes
