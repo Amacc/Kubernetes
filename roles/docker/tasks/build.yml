@@ -13,6 +13,7 @@
     name: "{{ registry_host }}/{{ container_name }}"
     build:
       path: "{{ dockerfile.dest | dirname }}"
+      dockerfile: "{{ dockerfile.dest }}"
     repository: "{{ registry_host }}/{{ container_name }}:{{ container_tag }}"
     tag: "{{ container_tag }}"
     source: build
