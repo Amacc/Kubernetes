@@ -12,3 +12,14 @@
         tasks_from: registries
   tags:
     - registry
+
+- name: Deploy Internal Containers
+  hosts: build
+  tasks:
+    - include_role:
+        name: docker
+        tasks_from: build
+      vars:
+        container_name: ee-build
+        docker_template: build.Dockerfile
+      # with_items:

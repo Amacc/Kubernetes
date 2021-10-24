@@ -1,0 +1,21 @@
+
+- name: Render Docker Template
+  ansible.builtin.template:
+    src: "{{ docker_template }}"
+    dest: "/tmp/{{ docker_template }}"
+  register: dockerfile
+    # owner: bin
+    # group: wheel
+    # mode: '0644'
+
+- name: Build Docker Job Image
+  community.docker.docker_image:
+    name: "{{ registry_host }}/{{ container_name }}"
+    build:
+      path: "{{ dockerfile.dest }}"
+    repository: "{{ registry_host }}/{{ container_name }}:{{ container_tag }}"
+    tag: "{{ container_tag }}"
+    source: build
+    force_tag: yes
+    force_source: yes
+    push: true
