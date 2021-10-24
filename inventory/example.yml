@@ -18,6 +18,14 @@ all:
         worker-05.local:
           ansible_host: 192.168.0.25
 
+    helm:
+      hosts:
+        rpi-master.local:
+
+    build:
+      hosts:
+        rpi-master.local:
+
   vars:
     ansible_user: pi
 
