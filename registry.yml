@@ -16,6 +16,25 @@
 - name: Deploy Internal Containers
   hosts: build
   tasks:
+
+    - include_role:
+        name: docker
+        tasks_from: build
+      vars:
+        container_name: python/base
+        container_dockerfile: Containerfile
+        container_source: https://github.com/ansible/python-base-image.git
+
+    - include_role:
+        name: docker
+        tasks_from: build
+      vars:
+        container_name: ansible/
+        container_source: build.Dockerfile
+        # docker_template: build.Dockerfile
+        build_args:
+          CONTAINER_IMAGE: "{{ registry_host }}/python/base"
+
     - include_role:
         name: docker
         tasks_from: build
