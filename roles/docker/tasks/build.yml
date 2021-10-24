@@ -9,6 +9,7 @@
     # mode: '0644'
 
 - name: Build Docker Job Image
+  become: "{{ docker_become | default(true) }}"
   community.docker.docker_image:
     name: "{{ registry_host }}/{{ container_name }}"
     build:
