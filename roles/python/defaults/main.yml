@@ -1,2 +1,3 @@
 no_become: false
 pip_executable: pip3
+python_executable: python3

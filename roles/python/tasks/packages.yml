@@ -1,8 +1,8 @@
 - name: Python SetupTools
-  ansible.builtin.package: 
-    name: 
+  ansible.builtin.package:
+    name:
       - python-setuptools
-      - "python-{{ pip_executable | default(omit) }}"
+      - "{{ python_executable if pip_executable else omit }}-pip"
   become: "{{ not no_become and ansible_user != 'root' }}"
 
 - name: Install Python packages
