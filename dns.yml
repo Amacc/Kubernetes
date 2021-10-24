@@ -9,6 +9,6 @@
   tasks:
     - include_role:
         name: k3s-worker
-        tasks_from: resolv
+        tasks_from: resolve
   vars:
     dns_ip: "{{ hostvars[groups['helm'][0]]['hosted_dns'] }}"
