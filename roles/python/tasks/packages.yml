@@ -2,13 +2,14 @@
   ansible.builtin.package: 
     name: 
       - python-setuptools
-      - python-pip
+      - "python-{{ pip_executable | default(omit) }}"
   become: "{{ not no_become and ansible_user != 'root' }}"
 
 - name: Install Python packages
   ansible.builtin.pip:
     name: "{{ package }}"
     virtualenv: "{{ venv_path | default(omit) }}"
+    executable: "{{ pip_executable | default(omit) }}"
   with_items: "{{ packages | default([]) }}"
   loop_control:
     loop_var: package
