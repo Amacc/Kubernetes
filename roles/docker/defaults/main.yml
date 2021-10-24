@@ -1,1 +1,2 @@
 container_tag: latest
+awx_ee_version: devel
