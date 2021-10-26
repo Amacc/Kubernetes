@@ -1,9 +1,9 @@
 - name: Install Python Packages
   ansible.builtin.package:
     name:
-      - python-setuptools
-      - "{{ python_executable if pip_executable else omit }}-pip"
-      - "{{ python_executable if venv_path else omit }}-virtualenv"
+      - "{{ ansible_python_interpreter }}-setuptools"
+      - "{{ ansible_python_interpreter }}-pip"
+      - "{{ ansible_python_interpreter }}-virtualenv"
   become: "{{ not no_become and ansible_user != 'root' }}"
 
 - name: Install Python PIP Packages
