@@ -10,7 +10,7 @@
   ansible.builtin.pip:
     name: "{{ package }}"
     virtualenv: "{{ venv_path | default(omit) }}"
-    executable: "{{ pip_executable | default(omit) }}"
+    executable: "{{ omit if venv_path else pip_executable}}"
   with_items: "{{ packages | default([]) }}"
   loop_control:
     loop_var: package
