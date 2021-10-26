@@ -11,6 +11,7 @@
     name: "{{ package }}"
     virtualenv: "{{ venv_path | default(omit) }}"
     executable: "{{ omit if venv_path else pip_executable}}"
+    virtualenv_python: "{{ python_executable | default(omit) }}"
   with_items: "{{ packages | default([]) }}"
   loop_control:
     loop_var: package
