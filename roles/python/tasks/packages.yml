@@ -3,6 +3,7 @@
     name:
       - python-setuptools
       - "{{ python_executable if pip_executable else omit }}-pip"
+      - "{{ python_executable if venv_path else omit }}-virtualenv"
   become: "{{ not no_become and ansible_user != 'root' }}"
 
 - name: Install Python packages
@@ -13,3 +14,9 @@
   with_items: "{{ packages | default([]) }}"
   loop_control:
     loop_var: package
+
+
+- name: Set Interpreter
+  ansible.builtin.set_fact:
+    ansible_python_interpreter: "{{ venv_path }}/bin/python"
+  when: venv_path is defined
