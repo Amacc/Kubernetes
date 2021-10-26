@@ -6,7 +6,7 @@
       - "{{ python_executable if venv_path else omit }}-virtualenv"
   become: "{{ not no_become and ansible_user != 'root' }}"
 
-- name: Install Python packages
+- name: Install Python PIP Packages
   ansible.builtin.pip:
     name: "{{ package }}"
     virtualenv: "{{ venv_path | default(omit) }}"
