@@ -1,0 +1,10 @@
+
+- name: Build AWX Operator
+  hosts: builder
+  roles:
+    - awx-operator
+
+# - name: Install AWX Operator
+#   hosts: localhost
+#   roles:
+#     - awx
