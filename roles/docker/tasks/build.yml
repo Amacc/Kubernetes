@@ -16,6 +16,11 @@
 - name: Generate Dockerfile
   when: docker_template is defined
   block:
+    - name: Docker Template Location
+      file:
+        path: "~/containers/{{ container_name }}/"
+        state: directory
+
     - name: Render Docker Template
       ansible.builtin.template:
         src: "{{ docker_template }}"
