@@ -25,6 +25,7 @@
         container_name: python/base
         container_dockerfile: Containerfile
         container_source: https://github.com/ansible/python-base-image.git
+      tags: python-base
 
     - name: Python Builder
       include_role:
@@ -36,6 +37,7 @@
         container_source: https://github.com/ansible/python-builder-image.git
         build_args:
           CONTAINER_IMAGE: "{{ registry_host }}/python/base"
+      tags: python-builder
 
     - name: Ansible Runner
       include_role:
@@ -48,6 +50,7 @@
         build_args:
           PYTHON_BASE_IMAGE: "{{ registry_host }}/python/base"
           PYTHON_BUILDER_IMAGE: "{{ registry_host }}/python/builder"
+      tags: ansible-runner
 
     - name: Ansible Builder
       include_role:
@@ -56,10 +59,11 @@
       vars:
         container_name: ansible/builder
         container_dockerfile: Containerfile
-        container_source: https://github.com/ansible/awx-ee.git
+        container_source: https://github.com/ansible/ansible-builder.git
         build_args:
           PYTHON_BASE_IMAGE: "{{ registry_host }}/python/base"
           PYTHON_BUILDER_IMAGE: "{{ registry_host }}/python/builder"
+      tags: ansible-Builder
 
     - name: AWX Execution Environment
       include_role:
@@ -72,11 +76,15 @@
         build_args:
           EE_BASE_IMAGE: "{{ registry_host }}/ansible/runner"
           EE_BUILDER_IMAGE: "{{ registry_host }}/ansible/builder"
+      tags: awx-ee
 
-    - include_role:
+    - Name: AWX Custom Execution Environment
+      include_role:
         name: docker
         tasks_from: build
       vars:
-        container_name: ee-build
+        container_name: awx/custom-ee
         docker_template: build.Dockerfile
+        build_args:
+          EE_BASE_IMAGE: "{{ registry_host }}/ansible/runner"
       # with_items:
