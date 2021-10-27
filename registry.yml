@@ -63,7 +63,19 @@
         build_args:
           PYTHON_BASE_IMAGE: "{{ registry_host }}/python/base"
           PYTHON_BUILDER_IMAGE: "{{ registry_host }}/python/builder"
-      tags: ansible-Builder
+      tags: ansible-builder
+
+    # Build Custom Runner to usefor the EE
+    - name: AWX Custom Execution Environment
+      include_role:
+        name: docker
+        tasks_from: build
+      vars:
+        container_name: ansible/custom/runner
+        docker_template: make.Dockerfile
+        build_args:
+          EE_BASE_IMAGE: "{{ registry_host }}/ansible/runner"
+      tags: ansible-custom-runner
 
     - name: AWX Execution Environment
       include_role:
@@ -74,7 +86,7 @@
         container_dockerfile: Containerfile
         container_source: https://github.com/ansible/awx-ee.git
         build_args:
-          EE_BASE_IMAGE: "{{ registry_host }}/ansible/runner"
+          EE_BASE_IMAGE: "{{ registry_host }}/ansible/custom/runner"
           EE_BUILDER_IMAGE: "{{ registry_host }}/ansible/builder"
       tags: awx-ee
 
