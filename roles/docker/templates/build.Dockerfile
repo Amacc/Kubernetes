@@ -1,4 +1,5 @@
-FROM quay.io/ansible/awx-ee:{{ awx_ee_version }}
+ARG EE_BASE_IMAGE=quay.io/ansible/ansible-runner:latest
+FROM $EE_BASE_IMAGE
 
 USER root
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 \
