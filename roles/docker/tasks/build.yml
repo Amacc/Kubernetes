@@ -19,7 +19,7 @@
     - name: Render Docker Template
       ansible.builtin.template:
         src: "{{ docker_template }}"
-        dest: "/tmp/{{ docker_template }}"
+        dest: "~/containers/{{ container_name }}/{{ docker_template }}"
       register: dockerfile
 
     - name: Set Build Variables

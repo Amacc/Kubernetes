@@ -95,8 +95,8 @@
         name: docker
         tasks_from: build
       vars:
-        container_name: awx/custom-ee
+        container_name: awx/custom/ee
         docker_template: build.Dockerfile
         build_args:
-          EE_BASE_IMAGE: "{{ registry_host }}/ansible/runner"
-      # with_items:
+          EE_BASE_IMAGE: "{{ registry_host }}/awx/ee"
+      tags: awx-custom-ee
