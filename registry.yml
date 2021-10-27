@@ -78,7 +78,7 @@
           EE_BUILDER_IMAGE: "{{ registry_host }}/ansible/builder"
       tags: awx-ee
 
-    - Name: AWX Custom Execution Environment
+    - name: AWX Custom Execution Environment
       include_role:
         name: docker
         tasks_from: build
