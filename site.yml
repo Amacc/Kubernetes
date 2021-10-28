@@ -4,3 +4,4 @@
 - import_playbook: dns.yml
 - import_playbook: pihole.yml
 - import_playbook: registry.yml
+- import_playbook: awx.yml
