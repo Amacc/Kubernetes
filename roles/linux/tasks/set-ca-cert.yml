@@ -1,7 +1,7 @@
 
 - name: Set CA cert
   copy:
-    content: "{{ ca_cert }}"
+    content: "{{ ca_cert }}\n"
     dest: "/usr/local/share/ca-certificates/extra/{{ base_dns }}.crt"
   register: ca_cert_file
   when: ca_cert is defined and ca_cert
