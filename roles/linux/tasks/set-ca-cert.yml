@@ -1,0 +1,17 @@
+
+- name: Set CA cert
+  copy:
+    content: "{{ ca_cert }}"
+    dest: "/usr/local/share/ca-certificates/extra/{{ base_dns }}.crt"
+  register: ca_cert_file
+  when: ca_cert is defined and ca_cert
+  become: yes
+
+- name: Update the Root CA
+  ansible.builtin.shell: update-ca-certificates
+  when: ca_cert_file.changed
+
+- name: Set CA File path Fact
+  ansible.builtin.fact:
+    ca_file: "{{ ca_cert_file.dest }}"
+  when: ca_cert_file is defined

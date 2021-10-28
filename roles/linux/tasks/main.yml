@@ -1,3 +1,6 @@
 
+- include_tasks: set-ca-cert.yml
+  when: ca_cert is defined and ca_cert
+
 - include_tasks: set-group.yml
   when: user is defined and group is defined

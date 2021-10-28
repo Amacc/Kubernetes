@@ -1,8 +1,9 @@
 
-- name: Creates directory
+- name: Create k3s directory
   file:
     path: /etc/rancher/k3s
     recurse: true
+    state: directory
   become: true
 
 - name: set registries.yml
