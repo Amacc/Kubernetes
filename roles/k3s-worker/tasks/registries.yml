@@ -6,8 +6,16 @@
     state: directory
   become: true
 
-- name: set registries.yml
+- name: Set k3s Container Registry Configuration
   ansible.builtin.template:
     src: registries.yml
     dest: /etc/rancher/k3s/registies.yml
   become: true
+  register: k3s_registry_config
+
+- name: Restart Agent Service when the template changes
+  ansible.builtin.service:
+    name: k3s-agent.service
+    state: reloaded
+  become: true
+  when: k3s_registry_config.changed
