@@ -1,3 +1,9 @@
+- name: Create Cert Directory
+  file:
+    path: /usr/local/share/ca-certificates/extra/
+    recurse: true
+    state: directory
+  become: true
 
 - name: Set CA cert
   copy:
