@@ -8,8 +8,12 @@
   become: yes
 
 - name: Update the Root CA
-  ansible.builtin.shell: update-ca-certificates
+  ansible.builtin.shell:
+    update-ca-certificates
+  args:
+    executable: /bin/bash
   when: ca_cert_file.changed
+  become: yes
 
 - name: Set CA File path Fact
   ansible.builtin.set_fact:
