@@ -12,6 +12,6 @@
   when: ca_cert_file.changed
 
 - name: Set CA File path Fact
-  ansible.builtin.fact:
+  ansible.builtin.set_fact:
     ca_file: "{{ ca_cert_file.dest }}"
   when: ca_cert_file is defined
