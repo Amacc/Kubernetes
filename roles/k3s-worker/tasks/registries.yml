@@ -16,6 +16,6 @@
 - name: Restart Agent Service when the template changes
   ansible.builtin.service:
     name: k3s-agent.service
-    state: reloaded
+    state: restarted
   become: true
   when: k3s_registry_config.changed
