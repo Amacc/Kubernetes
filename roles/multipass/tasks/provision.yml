@@ -1,0 +1,41 @@
+---
+- name: Log VM creation start
+  debug:
+    msg: "About to create VM {{ vmname }}..."
+  tags: 
+  - build
+
+- name: Log VM teardown start
+  debug:
+    msg: "About to teardown VM {{ vmname }}..."
+  tags: 
+  - teardown
+
+- name: Delete existing VM
+  shell: |
+    multipass info {{ vmname }} > /dev/null 2> /dev/null
+    if [ $? -eq 0 ]; then
+      multipass delete {{ vmname }}
+      multipass purge
+    fi
+  tags: 
+  - teardown
+  - never
+
+- name: Create new VM
+  shell: multipass launch --name {{ vmname }} --cloud-init {{ cloud_init }} {{ vmcreationparams }}
+  when: '"teardown" not in ansible_run_tags'
+  vars:
+    cloud_init: "{{ role_path }}/files/cloud-init.yml"
+  tags: build
+
+- name: Log VM creation completion
+  debug:
+    msg: "Finished creating VM {{ vmname }}."
+  tags: build
+
+- name: Log VM deletion completion
+  debug:
+    msg: "Finished deleting VM {{ vmname }}."
+  tags: 
+  - teardown

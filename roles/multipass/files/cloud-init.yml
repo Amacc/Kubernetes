@@ -1,0 +1,6 @@
+users:
+  - default
+  - name: ubuntu
+    sudo:  ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDeBvjmgahm/jADgj65Esn8EM6GFJEsCXBmfarCoum96mkr7HhbG5xkXFfM/eyS1k88Es1aKlNPDaaOe2fnYUIgvWzSXS5yVRZA/hOBrPcufLIsBnJnWr4/O2yHxAH5Q9xrUqBWBdidmc2JvFntJgvRclTgZWvX5LcC41H7zlvtjMUb2oYa8kqx84tIhvFwdhjw/9unr1Kw+ET5f4cDDpduKVKiW65JF2B/ODVlMnmTRefaXzlBug43ZhR5Q3WlEUnOyAEsFSdkoi1DmdBPvp+MqL295jG3tKkaL5zuL0xzvtC8/w7bCKq5DkEXjWVApfVyOEwCQnsLHXwBEMh+gEnpCEmteiZHBOZu+jllEtI87Es3iHFGPNBMXbBg+3xI8zHUKk8O9WwNddRqDwUMnhZpBebTb98TbkmSkHNcCp6Xi9b2v3tTQhK9ry3aRIGyrSuNJKuiRsHKll8BG6mkbdGQoFu0ifxrkLbAb3qjVsLoor/Fa8JG2PTFdOq2iTUeK5E= cstine@dl380g7

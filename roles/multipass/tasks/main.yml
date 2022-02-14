@@ -1,0 +1,28 @@
+---
+- name: Read cluster node VM configuration from file
+  include_vars:
+    file: "{{ role_path }}/files/nodes.yml"
+    name: nodes
+  tags: always
+
+- name: Template cloud-init.yml to /files
+  ansible.builtin.template:
+    src: cloud-init-template.j2
+    dest: "{{ role_path }}/files/cloud-init.yml"
+    mode: '0644'
+  delegate_to: localhost
+  vars:
+    public_key: "{{lookup('file', '~/.ssh/id_rsa.pub')}}"
+  tags: build
+  
+- name: Provision VMs
+  include_tasks: provision.yml
+  vars:
+    vmname: "{{ item.key }}"
+    vmcreationparams: "{{ item.value }}"
+  loop: "{{ nodes | dict2items }}"
+  tags: always
+
+- debug:
+    msg: "{{ ansible_host }}"
+  tags: always
