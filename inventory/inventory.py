@@ -8,34 +8,35 @@ import subprocess
 import argparse
 import json
 
+
 class MutipassInventory(object):
 
     def __init__(self):
 
         self.inventory = \
             {
-            'all': {
-                'children': [
-                    'server',
-                    'master',
-                    'workers',
-                    'helm',
-                    'build'
-                ],
-                'vars': {
-                   'ansible_user': 'ubuntu',
-                   'ansible_ssh_private_key_file': '~/.ssh/id_rsa',
-                   'example_variable': 'value'
-               }
-            },
-            '_meta': {
-                'hostvars': {
-                    '54.83.174.103': {
-                        'varnish_host_specific_var': 'foo'
+                'all': {
+                    'children': [
+                        'server',
+                        'master',
+                        'workers',
+                        'helm',
+                        'build'
+                    ],
+                    'vars': {
+                        'ansible_user': 'ubuntu',
+                        'ansible_ssh_private_key_file': '~/.ssh/id_rsa',
+                        'example_variable': 'value'
+                    }
+                },
+                '_meta': {
+                    'hostvars': {
+                        '54.83.174.103': {
+                            'varnish_host_specific_var': 'foo'
+                        },
                     },
                 },
-            },
-        }
+            }
         self.read_cli_args()
         self.instances = self.get_multipass_instances()
 
@@ -59,7 +60,7 @@ class MutipassInventory(object):
 
         server = {}
         master = {}
-        workers_temp = {'workers':{'hosts':[]}}
+        workers_temp = {'workers': {'hosts': []}}
         helm = {}
         build = {}
 
@@ -91,7 +92,7 @@ class MutipassInventory(object):
 
     # Empty inventory for testing.
     def empty_inventory(self):
-            return {'_meta': {'hostvars': {}}}
+        return {'_meta': {'hostvars': {}}}
 
     # Read the command line args passed to the script.
     def read_cli_args(self):
@@ -112,6 +113,7 @@ class MutipassInventory(object):
             return sorted(filtered_list, key=lambda x: x['name'])
         except Exception as e:
             print(e)
+
 
 # Get the inventory.
 MutipassInventory()
