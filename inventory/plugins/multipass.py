@@ -10,7 +10,7 @@ import subprocess
 import json
 from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
 
-print('LOADING')
+# TODO: ANSIBLE LOGGING= print('LOADING')
 __metaclass__ = type
 
 DOCUMENTATION = r"""
@@ -46,30 +46,30 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
     def get_multipass_instances(self, target_host=None):
         try:
             # pipe multipass json list into dictionary
-            print("Running Process on", target_host)
+            # TODO: ANSIBLE LOGGING= print("Running Process on", target_host)
             ssh = ['ssh', target_host]
             multipass = ['multipass', 'list', '--format', 'json']
             process = ssh + multipass if target_host else multipass
-            print("Running Process", *process)
+            # TODO: ANSIBLE LOGGING= print("Running Process", *process)
             result = subprocess.run(process,stdout=subprocess.PIPE)
             return json.loads(result.stdout.decode('utf-8'))['list']
         except Exception as e:
-            print(e)
+            # TODO: ANSIBLE LOGGING= print(e)
             raise
 
     def parse(self, inventory, loader, path, cache=True):
-        print('Begin Parse: ', inventory, loader, path, cache)
+        # TODO: ANSIBLE LOGGING= print('Begin Parse: ', inventory, loader, path, cache)
 
         super(InventoryModule, self).parse(inventory, loader, path, cache)
         config = self._read_config_data(path)
-        print('Found Config: ',config)
+        # TODO: ANSIBLE LOGGING= print('Found Config: ',config)
 
         instances = self.get_multipass_instances(config['multipass_server'])
-        print('Found Instances', instances)
+        # TODO: ANSIBLE LOGGING= print('Found Instances', instances)
 
         compose = config['compose']
         is_strict = config.get('strict', True)
-        print('Found Instances', instances)
+        # TODO: ANSIBLE LOGGING= print('Found Instances', instances)
 
         for instance in instances:
             self.add_host(instance['name'], instance, is_strict, compose)
@@ -77,7 +77,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
     def add_host(self, hostname, host_vars, is_strict, compose):
         ''' Adds the instance to the running inventory '''
-        print("Adding Host", hostname, host_vars)
+        # TODO: ANSIBLE LOGGING= print("Adding Host", hostname, host_vars)
         self.inventory.add_host(hostname, group='all')
 
         for var_name, var_value in host_vars.items():
