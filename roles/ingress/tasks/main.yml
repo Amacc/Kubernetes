@@ -1,17 +1,11 @@
-
-# helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-# helm repo update
-# helm install ingress-nginx ingress-nginx/ingress-nginx
-# From repository
-
 - name: LoadBalancer
   block:
     - name: MetalB Namespace
-      community.kubernetes.k8s:
+      kubernetes.core.k8s:
         definition: "{{ lookup('file', 'metalb-namespace.yml') | from_yaml }}"
 
     - name: MetalB Config
-      community.kubernetes.k8s:
+      kubernetes.core.k8s:
         definition: "{{ lookup('file', 'metalb-config.yml') | from_yaml }}"
 
     - name: Get Newest Metalb Manifest
@@ -22,31 +16,39 @@
       register: manifest
 
     - name: MetalB Core System
-      community.kubernetes.k8s:
+      kubernetes.core.k8s:
         src: "{{ manifest.dest }}"
-        # definition: "{{ lookup('file', 'files/metalb-core.yml') | from_yaml }}"
   tags: install
 
-
-- name: Ingress
+- name: Internal Ingress
   block:
-    - name: ingress namespace
-      k8s:
-        state: present
-        definition:
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: ingress
-
-    - name: nginx chart repo
-      community.kubernetes.helm_repository:
+    - name: Add helm nginx repo
+      kubernetes.core.helm_repository:
         name: ingress-nginx
         repo_url: "https://kubernetes.github.io/ingress-nginx"
 
-    - name: Deploy latest version of nginx ingress
-      community.kubernetes.helm:
-        name: "{{ ingress_name }}"
+    - name: Install Nginx Chart for internal controller
+      kubernetes.core.helm:
+        name: internal-ingress
         chart_ref: ingress-nginx/ingress-nginx
-        release_namespace: ingress
+        values: "{{ lookup('template', 'files/internal-values.yml') | from_yaml }}"
+        release_namespace: internal-ingress
+        create_namespace: true
+  tags: install
+        
+- name: External Ingress
+  block:
+    - name: Add helm nginx repo
+      kubernetes.core.helm_repository:
+        name: ingress-nginx
+        repo_url: "https://kubernetes.github.io/ingress-nginx"
+
+    - name: Install Nginx Chart for external controller
+      kubernetes.core.helm:
+        name: external-ingress
+        chart_ref: ingress-nginx/ingress-nginx
+        values: "{{ lookup('template', 'files/external-values.yml') | from_yaml }}"
+        release_namespace: external-ingress
+        create_namespace: true
+  when: external_ingress is true
   tags: install
