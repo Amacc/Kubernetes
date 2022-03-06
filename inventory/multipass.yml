@@ -1,0 +1,11 @@
+# Example multipass inventory source
+
+plugin: multipass
+multipass_server: 192.168.1.252
+
+compose:
+  ansible_host: ipv4[1]
+
+groups:
+  master: "'01' in name"
+  workers: "'01' not in name"

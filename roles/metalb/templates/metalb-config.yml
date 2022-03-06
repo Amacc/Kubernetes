@@ -1,0 +1,15 @@
+#jinja2: lstrip_blocks: "True"
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: "{{ address_pool_name|default('default') }}"
+      protocol: "{{ address_pool_protocol|default('layer2') }}"
+      addresses:
+      {% for address_range in metalb_addresses %}
+      - {{ item }}
+      {% endfor %}

@@ -1,52 +1,17 @@
+- name: Add helm Nginx repo
+  kubernetes.core.helm_repository:
+    name: ingress-nginx
+    repo_url: "https://kubernetes.github.io/ingress-nginx"
+  delegate_to: "{{ HELM_DELEGATE }}"
+  run_once: True
+  tags: setup
 
-# helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-# helm repo update
-# helm install ingress-nginx ingress-nginx/ingress-nginx
-# From repository
-
-- name: LoadBalancer
-  block:
-    - name: MetalB Namespace
-      community.kubernetes.k8s:
-        definition: "{{ lookup('file', 'metalb-namespace.yml') | from_yaml }}"
-
-    - name: MetalB Config
-      community.kubernetes.k8s:
-        definition: "{{ lookup('file', 'metalb-config.yml') | from_yaml }}"
-
-    - name: Get Newest Metalb Manifest
-      ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
-        dest: /tmp/metalb-core.yml
-        mode: '0664'
-      register: manifest
-
-    - name: MetalB Core System
-      community.kubernetes.k8s:
-        src: "{{ manifest.dest }}"
-        # definition: "{{ lookup('file', 'files/metalb-core.yml') | from_yaml }}"
-  tags: install
-
-
-- name: Ingress
-  block:
-    - name: ingress namespace
-      k8s:
-        state: present
-        definition:
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: ingress
-
-    - name: nginx chart repo
-      community.kubernetes.helm_repository:
-        name: ingress-nginx
-        repo_url: "https://kubernetes.github.io/ingress-nginx"
-
-    - name: Deploy latest version of nginx ingress
-      community.kubernetes.helm:
-        name: "{{ ingress_name }}"
-        chart_ref: ingress-nginx/ingress-nginx
-        release_namespace: ingress
+- name: Install Nginx Chart
+  kubernetes.core.helm:
+    name: internal-ingress
+    chart_ref: ingress-nginx/ingress-nginx
+    values: "{{ lookup('template', 'ingress-values.yml') | from_yaml }}"
+    release_namespace: "{{ ingress_namespace }}"
+    create_namespace: true
+  delegate_to: "{{ HELM_DELEGATE }}"
   tags: install
