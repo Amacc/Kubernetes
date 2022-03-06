@@ -1,5 +1,6 @@
 
 - import_playbook: k3s-cluster.yml
+- import_playbook: loadbalancer.yml
 - import_playbook: ingress.yml
 - import_playbook: dns.yml
 - import_playbook: pihole.yml

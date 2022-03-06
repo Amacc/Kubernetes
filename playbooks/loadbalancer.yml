@@ -1,0 +1,5 @@
+
+- name: Setup Loadbalancer Services
+  hosts: master
+  roles:
+    - metalb
