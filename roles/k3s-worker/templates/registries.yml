@@ -1,0 +1,12 @@
+mirrors:
+  {{ registry_host }}:
+    endpoint:
+      - "https://{{ registry_host }}"
+
+configs:
+  "{{ registry_host }}":
+    tls:
+      insecure_skip_verify: true
+      {% if ca_file is defined and ca_file %}
+      ca_file: {{ ca_file }}
+      {% endif %}

@@ -1,0 +1,35 @@
+
+- name: Helm Version
+  shell: helm version
+  changed_when: helm_version_command.rc != 0
+  register: helm_version_command
+  ignore_errors: true
+
+- name: Install Helm
+  when: helm_version_command.failed
+  # When running in a pod running as root user internally
+  # Alternatively when running on pi this should call the sudo command
+  become: "{{ not no_become and ansible_user != 'root' }}"
+  block:
+    - name: Setup openssl for ssh
+      ansible.builtin.package:
+        name: openssl
+      # going to just ignore this for now having issues running this from the awx-ee
+      ignore_errors: true
+
+    - name: Download zsh installer
+      get_url:
+        url: https://raw.githubusercontent.com/helm/helm/{{ helm_version }}/scripts/get-helm-3
+        dest: /tmp/get_helm.sh
+        mode: 700
+
+    - name: Execute the zsh-installer.sh
+      ansible.builtin.shell: /tmp/get_helm.sh
+
+    - name: Remove the zsh-installer.sh
+      ansible.builtin.file:
+        path: /tmp/get_helm.sh
+        state: absent
+  tags:
+    - install
+    - helm

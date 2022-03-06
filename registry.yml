@@ -1,0 +1,14 @@
+
+- name: Setup Registry
+  hosts: helm
+  roles:
+    - registry
+
+- name: Setup Registy k3s config
+  hosts: workers
+  tasks:
+    - include_role:
+        name: k3s-worker
+        tasks_from: registries
+  tags:
+    - registry

@@ -1,0 +1,3 @@
+node-01: "--cpus 4 --network vmbr0 --mem 8G --disk 10G 20.04"
+node-02: "--cpus 4 --network vmbr0 --mem 8G --disk 10G 20.04"
+node-03: "--cpus 4 --network vmbr0 --mem 8G --disk 10G 20.04"

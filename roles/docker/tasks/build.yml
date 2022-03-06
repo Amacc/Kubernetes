@@ -1,0 +1,51 @@
+
+- name: Build From Source
+  when: container_source is defined
+  block:
+    - name: Clone Source from Git
+      ansible.builtin.git:
+        repo: "{{ container_source }}"
+        dest: "~/containers/{{ container_name }}"
+        version: "{{ container_version | default(omit) }}"
+
+    - name: Set Build Variables
+      set_fact:
+        build_path: "~/containers/{{ container_name }}"
+        build_containerfile: "{{ container_dockerfile }}"
+
+- name: Generate Dockerfile
+  when: docker_template is defined
+  block:
+    - name: Docker Template Location
+      file:
+        path: "~/containers/{{ container_name }}/"
+        state: directory
+
+    - name: Render Docker Template
+      ansible.builtin.template:
+        src: "{{ docker_template }}"
+        dest: "~/containers/{{ container_name }}/{{ docker_template }}"
+      register: dockerfile
+
+    - name: Set Build Variables
+      set_fact:
+        build_path: "{{ dockerfile.dest | dirname }}"
+        build_containerfile: "{{ dockerfile.dest }}"
+
+- name: Build Image {{ container_name }}
+  # become: "{{ docker_become | default(true) }}"
+  community.docker.docker_image:
+    name: "{{ registry_host }}/{{ container_name }}"
+    build:
+      path: "{{ build_path }}"
+      dockerfile: "{{ build_containerfile }}"
+      args: "{{ build_args | default(omit) }}"
+    repository: "{{ registry_host }}/{{ container_name }}:{{ container_tag }}"
+    tag: "{{ container_tag }}"
+    source: build
+    force_tag: yes
+    force_source: yes
+    push: true
+  register: build_image
+  async: 3600
+  poll: 15

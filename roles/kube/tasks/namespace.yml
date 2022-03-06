@@ -1,0 +1,9 @@
+##
+# Template Variables
+#
+
+- name: Namespace
+  community.kubernetes.k8s:
+    definition: "{{ lookup('template', 'template/namespace.yml') | from_yaml }}"
+    state: |-
+      {{ state | default("present") }}

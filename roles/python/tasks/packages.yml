@@ -1,0 +1,22 @@
+- name: Install Python Packages
+  ansible.builtin.package:
+    name:
+      - "{{ ansible_python_interpreter }}-setuptools"
+      - "{{ ansible_python_interpreter }}-pip"
+      - "{{ ansible_python_interpreter }}-virtualenv"
+  become: "{{ not no_become and ansible_user != 'root' }}"
+
+- name: Install Python PIP Packages
+  ansible.builtin.pip:
+    name: "{{ package }}"
+    virtualenv: "{{ venv_path | default(omit) }}"
+    executable: "{{ omit if venv_path | default('') else pip_executable}}"
+    virtualenv_python: "{{ python_executable | default(omit) }}"
+  with_items: "{{ packages | default([]) }}"
+  loop_control:
+    loop_var: package
+
+# - name: Set Interpreter
+#   ansible.builtin.set_fact:
+#     ansible_python_interpreter: "{{ venv_path }}/bin/python"
+#   when: venv_path is defined

@@ -1,0 +1,27 @@
+- name: Create Cert Directory
+  file:
+    path: /usr/local/share/ca-certificates/extra/
+    recurse: true
+    state: directory
+  become: true
+
+- name: Set CA cert
+  copy:
+    content: "{{ ca_cert }}\n"
+    dest: "/usr/local/share/ca-certificates/extra/{{ base_dns }}.crt"
+  register: ca_cert_file
+  when: ca_cert is defined and ca_cert
+  become: yes
+
+- name: Update the Root CA
+  ansible.builtin.shell:
+    update-ca-certificates
+  args:
+    executable: /bin/bash
+  when: ca_cert_file.changed
+  become: yes
+
+- name: Set CA File path Fact
+  ansible.builtin.set_fact:
+    ca_file: "{{ ca_cert_file.dest }}"
+  when: ca_cert_file is defined

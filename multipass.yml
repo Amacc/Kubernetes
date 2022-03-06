@@ -1,0 +1,5 @@
+---
+- name: Manage multipass VMs
+  hosts: localhost
+  roles:
+    - role: multipass  

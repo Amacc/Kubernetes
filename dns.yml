@@ -1,13 +1,14 @@
 
-- name: Helm setup on all helm servers
-  hosts: localhost
-  tasks:
-  - name: Helm
-    include_role:
-      name: common
-      tasks_from: helm
-
-- name: Setup DNS
-  hosts: localhost
+- name: Deploy DNS
+  hosts: helm
   roles:
     - dns
+
+- name: Setup Workers to use new DNS
+  hosts: workers
+  tasks:
+    - include_role:
+        name: k3s-worker
+        tasks_from: resolve
+  vars:
+    dns_ip: "{{ hostvars[groups['helm'][0]]['hosted_dns_ip'] }}"

@@ -1,0 +1,6 @@
+controller:
+  ingressClassResource:
+    name: "{{ ingress_name }}"
+    enabled: "{{ ingress_enabled }}"
+    default: "{{ ingress_default }}"
+    controllerValue: "{{ ingress_controller_value }}"

@@ -1,0 +1,16 @@
+# roles/dns/meta/argument_specs.yml
+---
+argument_specs:
+  # roles/dns/tasks/main.yml entry point
+  main:
+    short_description: The main entry point for the myapp role.
+    options:
+      ingress_name:
+        type: "str"
+        required: true
+        description: "The name of the ingress resource."
+
+      ingress_namespace:
+        type: "str"
+        required: true
+        description: "The name of the ingress namespace."

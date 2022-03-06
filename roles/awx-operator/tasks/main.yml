@@ -1,0 +1,18 @@
+
+- name: Clone Project
+  ansible.builtin.git:
+    repo: https://github.com/ansible/awx-operator.git
+    dest: ~/projects/awx-operator
+    version: "{{ awx_operator_version }}"
+
+- name: "Build AWX Operator: {{ registry_host }}/awx/operator:{{ awx_operator_version }}"
+  ansible.builtin.shell: make deploy
+  environment:
+    NAMESPACE: awx
+    IMAGE_TAG_BASE: "{{ registry_host }}/awx/operator"
+    VERSION: "{{ awx_operator_version }}"
+  args:
+    chdir: ~/projects/awx-operator
+  tags:
+    - build
+

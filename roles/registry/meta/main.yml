@@ -1,0 +1,7 @@
+dependencies:
+  - role: helm
+  - role: python
+    vars:
+      packages:
+        - PyYAML
+        - docker

@@ -1,0 +1,18 @@
+
+- name: Create temporary file
+  ansible.builtin.tempfile:
+    state: file
+    suffix: temp
+  register: manifest_temp
+  when: manifest_file_path is not defined
+
+- name: Fetch Manifest
+  ansible.builtin.get_url:
+    url: "{{ manifest_url }}"
+    dest: "{{ manifest_file_path | default(manifest_temp.path) }}"
+    mode: '0664'
+
+- name: Install K8s Resources
+  community.kubernetes.k8s:
+    src: "{{ manifest_file_path | default(manifest_temp.path) }}"
+    namespace: "{{ namespace }}"

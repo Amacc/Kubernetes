@@ -1,0 +1,21 @@
+
+- name: Create k3s directory
+  file:
+    path: /etc/rancher/k3s
+    recurse: true
+    state: directory
+  become: true
+
+- name: Set k3s Container Registry Configuration
+  ansible.builtin.template:
+    src: registries.yml
+    dest: /etc/rancher/k3s/registies.yml
+  become: true
+  register: k3s_registry_config
+
+- name: Restart Agent Service when the template changes
+  ansible.builtin.service:
+    name: k3s-agent.service
+    state: restarted
+  become: true
+  when: k3s_registry_config.changed
