@@ -1,5 +1,0 @@
-
-- name: Setup Ingress Services
-  hosts: helm
-  roles:
-    - ingress
