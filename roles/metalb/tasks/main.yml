@@ -1,0 +1,21 @@
+- name: LoadBalancer
+  block:
+    - name: MetalB Namespace
+      kubernetes.core.k8s:
+        definition: "{{ lookup('file', 'metalb-namespace.yml') | from_yaml }}"
+
+    - name: MetalB Config
+      kubernetes.core.k8s:
+        definition: "{{ lookup('template', 'metalb-config.yml') | from_yaml }}"
+
+    - name: Get Newest Metalb Manifest
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
+        dest: /tmp/metalb-core.yml
+        mode: '0664'
+      register: manifest
+
+    - name: MetalB Core System
+      kubernetes.core.k8s:
+        src: "{{ manifest.dest }}"
+  tags: install

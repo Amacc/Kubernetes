@@ -1,6 +1,0 @@
-controller:
-  ingressClassResource:
-    name: internal-ingress
-    enabled: true
-    default: false
-    controllerValue: "k8s.io/internal-ingress"

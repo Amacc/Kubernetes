@@ -1,1 +1,6 @@
-external_ingress: true
+
+ingress_name: "{{ inventory_hostname }}"
+ingress_namespace: "ingress"
+ingress_default: False
+ingress_enabled: True
+ingress_controller_value: k8s.io/{{ ingress_name }}-ingress

@@ -1,6 +1,0 @@
-controller:
-  ingressClassResource:
-    name: external-ingress
-    enabled: true
-    default: false
-    controllerValue: "k8s.io/external-ingress"

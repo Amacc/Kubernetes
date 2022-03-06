@@ -1,0 +1,6 @@
+
+- name: Setup Ingress Services
+  hosts: ingress
+  gather_facts: False
+  roles:
+    - ingress
