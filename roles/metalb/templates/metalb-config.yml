@@ -11,5 +11,5 @@ data:
       protocol: "{{ address_pool_protocol|default('layer2') }}"
       addresses:
       {% for address_range in metalb_addresses %}
-      - {{ item }}
+      - {{ address_range }}
       {% endfor %}

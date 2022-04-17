@@ -19,3 +19,4 @@
       kubernetes.core.k8s:
         src: "{{ manifest.dest }}"
   tags: install
+  delegate_to: "{{ K8S_DELEGATE|default(omit) }}"
