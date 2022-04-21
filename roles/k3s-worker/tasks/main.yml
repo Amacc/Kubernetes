@@ -15,7 +15,8 @@
       --server-ip {{ hostvars[groups.master[0]].ansible_host }}
       --user {{ ansible_user }}
   when: "'k3s-agent.service' not in ansible_facts.services"
-  tags: install
+  tags:
+  - install
 
 - name: Teardown K3s Service
   ansible.builtin.shell: /usr/local/bin/k3s-agent-uninstall.sh

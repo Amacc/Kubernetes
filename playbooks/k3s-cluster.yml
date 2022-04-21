@@ -1,16 +1,8 @@
 
 - name: K3sUp
   hosts: localhost
-  tasks:
-    - name: Get K3sUp Version
-      block:
-      - shell: k3sup version
-      rescue:
-        - name: Install K3s Up
-          local_action:
-            module: shell
-            _raw_params: curl -sLS https://get.k3sup.dev | sh
-  tags: install
+  roles:
+    - k3sup
 
 - name: Setup K3s Master
   hosts: master
