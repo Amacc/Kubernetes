@@ -1,0 +1,11 @@
+- name: Get K3sUp Version
+  block:
+  - shell: k3sup version
+    register: k3s_version
+  rescue:
+    - name: Install K3s Up
+      local_action:
+        module: shell
+        _raw_params: curl -sLS https://get.k3sup.dev | sh
+      tags:
+      - install
