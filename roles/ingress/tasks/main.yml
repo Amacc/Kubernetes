@@ -8,7 +8,7 @@
 
 - name: Install Nginx Chart
   kubernetes.core.helm:
-    name: internal-ingress
+    name: "{{ inventory_hostname }}"
     chart_ref: ingress-nginx/ingress-nginx
     values: "{{ lookup('template', 'ingress-values.yml') | from_yaml }}"
     release_namespace: "{{ ingress_namespace }}"
