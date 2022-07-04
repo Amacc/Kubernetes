@@ -1,13 +1,14 @@
 
 - name: Deploy DNS
-  hosts: helm
+  hosts: dns
   roles:
     - dns
 
 - name: Setup Workers to use new DNS
   hosts: workers
   tasks:
-    - include_role:
+    - name: Setup resolv.conf on the worker nodes.
+      include_role:
         name: k3s-worker
         tasks_from: resolve
   vars:
